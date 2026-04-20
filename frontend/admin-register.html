@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Registration - Eventify</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="auth-body">
+
+    <div class="auth-container" style="max-width: 500px;">
+        <div style="text-align: center; margin-bottom: 25px;">
+            <div style="background: var(--primary-color); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 1.5rem; font-weight: bold;">AD</div>
+            <h2>Admin Portal Registration</h2>
+            <p>Create a master account with full system controls</p>
+        </div>
+
+        <form id="admin-register-form">
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="name" required placeholder="Master Admin Name">
+            </div>
+            <div class="form-group">
+                <label>Gmail / Email</label>
+                <input type="email" id="email" required placeholder="admin@gmail.com">
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" id="phone" required placeholder="+91 XXXX XXX XXX">
+            </div>
+            <div class="form-group">
+                <label>Master Password</label>
+                <input type="password" id="password" required placeholder="Create secure password">
+            </div>
+            <p id="error-message" class="error"></p>
+            <button type="submit" class="btn-primary auth-btn" style="background: #4f46e5;">Create Admin Account</button>
+        </form>
+        
+        <div class="auth-footer">
+            <p>Already have an admin account? <a href="login.html">Login here</a></p>
+            <p><a href="index.html">Back to Site</a></p>
+        </div>
+    </div>
+
+    <script src="./js/api.js"></script>
+    <script src="./js/auth.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventify - Ticket Booking System</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Header Navigation -->
+    <header class="navbar">
+        <div class="logo">Eventify</div>
+        <nav>
+            <ul id="nav-links">
+                <li><button id="theme-toggle" class="btn-icon" style="background:none; border:none; cursor:pointer; font-size:1.2rem; margin-right:10px;">🌙</button></li>
+                <li><a href="index.html">Home</a></li>
+                <li id="auth-link"><a href="login.html">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Discover and Book Amazing Events</h1>
+            <p>From music festivals to tech seminars, find it all here.</p>
+
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Search events by name...">
+                <select id="category-filter">
+                    <option value="">All Categories</option>
+                    <option value="Music">Music</option>
+                    <option value="Sports">Sports</option>
+                    <option value="Seminar">Seminar</option>
+                    <option value="Workshop">Workshop</option>
+                    <option value="Festival">Festival</option>
+                    <option value="Other">Other</option>
+                </select>
+                <button id="search-btn">Search</button>
+            </div>
+        </section>
+
+        <!-- Events List Section -->
+        <section class="events-section">
+            <h2>Upcoming Events</h2>
+            <div id="loading-spinner" class="spinner" style="display: none;"></div>
+            <div class="events-grid" id="events-container">
+                <!-- Events will be populated dynamically -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Booking Modal -->
+    <div id="booking-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="close-modal">&times;</span>
+            <h2 id="modal-event-title">Book Ticket</h2>
+            <p>Price per ticket: ₹<span id="modal-event-price"></span></p>
+            
+            <div id="seat-map-container" style="margin: 20px 0; background: var(--bg-color); padding: 15px; border-radius: 8px;">
+                <p style="text-align:center; font-weight: 600; margin-bottom: 15px; font-size:0.9rem;">Interactive Seat Selection <br><span style="font-size:0.8em; color:var(--text-secondary);">(Max 5 seats)</span></p>
+                <div id="seat-map-grid" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 15px;">
+                    <!-- Javascript injected visual seats -->
+                </div>
+                <div style="display:flex; justify-content: space-around; font-size:0.8rem; font-weight:600;">
+                    <span style="display:flex; align-items:center; gap:5px;"><div style="width:15px; height:15px; background:var(--border-color); border-radius:3px;"></div> Available</span>
+                    <span style="display:flex; align-items:center; gap:5px;"><div style="width:15px; height:15px; background:var(--primary-color); border-radius:3px;"></div> Selected</span>
+                    <span style="display:flex; align-items:center; gap:5px;"><div style="width:15px; height:15px; background:var(--error-color); border-radius:3px;"></div> Booked</span>
+                </div>
+            </div>
+
+            <div class="form-group" style="display:none;">
+                <input type="number" id="seat-count" value="0">
+            </div>
+
+            <p>Total: ₹<span id="modal-total-price">0</span></p>
+            <button id="confirm-booking-btn" class="btn-primary">Proceed to Payment</button>
+        </div>
+    </div>
+
+    <!-- Payment Gateway Modal -->
+    <div id="payment-modal" class="modal">
+        <div class="modal-content payment-ui">
+            <span class="close-btn" id="close-payment-modal">&times;</span>
+            <div class="payment-header">
+                <h3>Secure Checkout</h3>
+                <p>Total Payable: <strong>₹<span id="payment-total-amount"></span></strong></p>
+            </div>
+            
+            <div class="payment-body">
+                <div class="payment-methods" id="payment-methods">
+                    <div class="method active" data-method="card">Credit / Debit Card</div>
+                    <div class="method" data-method="upi">UPI</div>
+                </div>
+
+                <form id="payment-form">
+                    <!-- Card Inputs -->
+                    <div id="card-inputs">
+                        <div class="form-group">
+                            <label>Card Number</label>
+                            <input type="text" placeholder="XXXX XXXX XXXX XXXX" maxlength="19" required id="card-req-1">
+                        </div>
+                        <div class="form-group row">
+                            <div class="col">
+                                <label>Expiry Date</label>
+                                <input type="text" placeholder="MM/YY" maxlength="5" required id="card-req-2">
+                            </div>
+                            <div class="col">
+                                <label>CVV</label>
+                                <input type="password" placeholder="***" maxlength="3" required id="card-req-3">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Cardholder Name</label>
+                            <input type="text" placeholder="Full Name on Card" required id="card-req-4">
+                        </div>
+                    </div>
+
+                    <!-- UPI Inputs (Hidden by default) -->
+                    <div id="upi-inputs" style="display: none;">
+                        <div class="form-group" style="margin-bottom: 25px;">
+                            <label>UPI ID (Virtual Payment Address)</label>
+                            <input type="text" placeholder="e.g. akhilesh@ybl or mobile@paytm" id="upi-id-input">
+                            <span style="font-size: 0.8rem; color: #64748b; margin-top: 5px; display: block;">Open your UPI app on your phone to approve the payment.</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="process-payment-btn" class="btn-primary full-width payment-btn">
+                        Pay Securely
+                    </button>
+                    <p class="secure-text">🔒 256-bit Encrypted Secure Connection</p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container"></div>
+
+    <script src="./js/api.js"></script>
+    <script src="./js/app.js"></script>
+</body>
+
+</html>
